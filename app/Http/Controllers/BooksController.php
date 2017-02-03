@@ -9,6 +9,7 @@ use Request;
 class BooksController extends Controller
 {
     private $base_url = '';
+    private $data = [];
 
     public function __construct()
     {
@@ -16,6 +17,18 @@ class BooksController extends Controller
         if($this->base_url && substr($this->base_url, strlen($this->base_url) - 1) !== '/') {
             $this->base_url .= '/';
         }
+
+        $this->data['pagetitle'] = 'boojbooks | Welcome to boojbooks.';   
+        $this->data['view'] = 'home';
+        $this->data['nav_class'] = "home";
+
+        $this->data['search_results'] = [];
+        $this->data['booklists'] = Booklist::all();
+        $books = Books::all();
+        $this->data['books_count'] = count($books);
+        $this->data['booklists_count'] = count($this->data['booklists']);
+        $this->data['base_url'] = $this->base_url;
+
     }
 
 	public function google_api_search($query) {
@@ -44,43 +57,26 @@ class BooksController extends Controller
     public function start() {
 
         $form_data = Request::all();   
-        $results = [];
-        $data = [];
-        $data['pagetitle'] = 'boojbooks | Welcome to boojbooks.';    
-        $data['view'] = 'home';
 
-        $data['query'] = "";
-        $data['search_results'] = [];
-        $data['booklists'] = "";
-        $data['nav_class'] = "home";
-        $data['base_url'] = $this->base_url;
-        return view($data['view'], $data );
+        return view($this->data['view'], $this->data );
     }       
 
     public function about() {
 
         $form_data = Request::all();   
-        $results = [];
-        $data = [];
-        $data['pagetitle'] = 'boojbooks | About boojbooks.';    
-        $data['view'] = 'about';
-
-        $data['query'] = "";
-        $data['search_results'] = [];
-        $data['booklists'] = "";
-        $data['nav_class'] = "about";
-        $data['base_url'] = $this->base_url;
-        return view($data['view'], $data );
+        $this->data['pagetitle'] = 'boojbooks | About boojbooks.';    
+        $this->data['view'] = 'about';
+        $this->data['nav_class'] = "about";
+        return view($this->data['view'], $this->data );
     }        
 
 	public function search() {
 
 		$form_data = Request::all();   
-        $results = [];
-        $data = [];
-        $data['pagetitle'] = 'boojbooks | Search for book.';    
-        $data['view'] = 'home';
-
+        $this->data['pagetitle'] = 'boojbooks | Search for book.';    
+        $this->data['view'] = 'home';
+        $results = "";
+        
         if(!isset($form_data['query']) || empty($form_data['query'])) {
             $form_data['query'] = "";
         }
@@ -95,11 +91,13 @@ class BooksController extends Controller
                         $item['book_id'] = $item['industryIdentifiers'][0]['identifier'];
                     }
 
-                    $item['book_id'] = preg_replace("[A-Z\:]", "", $item['book_id']);
                     $book = Books::where('external_id', '=', $item['book_id'])->get();
 
                     if(count($book)==0) { 
                         $book = new Books;
+                        $book->booklist_id = 0;
+                        $book->notes = "";
+                        $book->pagenum = "";
                     } else {
                         $book = Books::find($book[0]['id']);
                     }
@@ -138,11 +136,12 @@ class BooksController extends Controller
 
                     $item->author = $book->author;
                     $book->external_id = $item['book_id'];
-                    $book->page_count = $item['pageCount'];
-                    $book->description = $item['description'];
+                    $book->page_count = ($item['pageCount'] ? $item['pageCount'] : 0);
+                    $book->description = ($item['description'] ? $item['description'] : "");
                     $book->name = $item['title'];
                     $book->imageurl = $item['imageLinks']['thumbnail'];
                     $book->infourl = $item['infoLink'];
+                    $book->category = ($book['category'] ? $book['category']  : "");
                     $item['external_id'] = $item['book_id'];
                     $item['book_id'] = $book['id'];
                     $book->save();             
@@ -158,24 +157,19 @@ class BooksController extends Controller
         }
 
         $booklists = Booklist::all();
-        if($data['view'] == 'lists'){
+        if($this->data['view'] == 'lists'){
             $results = $booklists;
         }
 
-        $data['query'] = $form_data['query'];
-        $data['search_results'] = $results;
-        $data['booklists'] = $booklists;
-        $data['base_url'] = $this->base_url;
-        $data['nav_class'] = "books";
-    	return view($data['view'], $data );
+        $this->data['search_results'] = $results;
+        $this->data['nav_class'] = "books";
+    	return view($this->data['view'], $this->data );
     }     
 
     public function showbook($book_id = 0) {
         $form_data = Request::all();   
-        $results = [];
-        $data = [];
-        $data['pagetitle'] = 'boojbooks | Book Information.';    
-        $data['view'] = 'books';
+        $this->data['pagetitle'] = 'boojbooks | Book Information.';    
+        $this->data['view'] = 'books';
 
         $book = Books::find($book_id);
         $booklists = Booklist::all();
@@ -214,21 +208,15 @@ class BooksController extends Controller
             $book->save();
         }
 
-        $data['book'] = $book;
-        $data['query'] = '';
-        $data['search_results'] = $results;
-        $data['booklists'] = $booklists;
-        $data['base_url'] = $this->base_url;
-        $data['nav_class'] = "books";
-        return view($data['view'], $data );                
+        $this->data['book'] = $book;
+        $this->data['nav_class'] = "books";
+        return view($this->data['view'], $this->data );                
     }
 
     public function booksinlist($booklist_id = 0) {
         $form_data = Request::all();   
-        $results = [];
-        $data = [];
-        $data['pagetitle'] = 'BookLists';    
-        $data['view'] = 'home';
+        $this->data['pagetitle'] = 'boojbooks | BookLists';    
+        $this->data['view'] = 'home';
 
         if(!isset($form_data['booklist_id']) || empty($form_data['booklist_id'])) {
             $form_data['booklist_id'] = 0;
@@ -236,27 +224,22 @@ class BooksController extends Controller
 
         $books = Books::where('booklist_id', '=', $booklist_id)->get();
 
-        $data['query'] = '';
-        $data['search_results'] = $books->toArray();
-        $data['booklists'] = Booklist::all();
-        $data['base_url'] = $this->base_url;
-        $data['nav_class'] = "lists";
-        return view($data['view'], $data );
+        $this->data['search_results'] = $books->toArray();
+        $this->data['nav_class'] = "lists";
+        return view($this->data['view'], $this->data );
     }    
 
     public function booklists($booklist_id = 0) {
         $form_data = Request::all();   
-        $results = [];
-        $data = [];
-        $data['pagetitle'] = 'BookLists';    
-        $data['view'] = 'lists';
+        $this->data['pagetitle'] = 'boojbooks | BookLists';    
+        $this->data['view'] = 'lists';
 
         if(!isset($form_data['booklist_id']) || empty($form_data['booklist_id'])) {
             $form_data['booklist_id'] = 0;
         }
 
         if(isset($form_data['delete']) && !empty($form_data['delete'])) {
-            $data['view'] = 'lists';
+            $this->data['view'] = 'lists';
             $booklist = Booklist::find($booklist_id);
             if($booklist) {
                 $booklist->delete();
@@ -264,14 +247,14 @@ class BooksController extends Controller
         }
 
         if(isset($form_data['newlist']) && !empty($form_data['newlist'])) {
-            $data['view'] = 'lists';
+            $this->data['view'] = 'lists';
             $booklist = new Booklist;
             $booklist->listname = $form_data['newlist'];
             $booklist->save();
         }        
 
         if(isset($form_data['mylists']) && !empty($form_data['mylists'])) {
-            $data['view'] = 'lists';
+            $this->data['view'] = 'lists';
         }        
 
         $booklists = Booklist::all();
@@ -281,16 +264,13 @@ class BooksController extends Controller
         }
         $booklist_script .= "</select>";
 
-        if($data['view'] == 'lists'){
+        if($this->data['view'] == 'lists'){
             $results = $booklists;
         }
 
-        $data['query'] = '';
-        $data['search_results'] = $results;
-        $data['booklists'] = Booklist::all();
-        $data['base_url'] = $this->base_url;
-        $data['nav_class'] = "lists";
-        return view($data['view'], $data );
+        $this->data['search_results'] = $results;
+        $this->data['nav_class'] = "lists";
+        return view($this->data['view'], $this->data );
     }
 
 }

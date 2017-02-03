@@ -16,6 +16,8 @@ class Booklists extends Migration
         Schema::create('booklists', function (Blueprint $table) {
             $table->increments('id');
             $table->string('listname', 1000);
+            $table->datetime('updated_at');
+            $table->datetime('created_at');
         });
     }
 

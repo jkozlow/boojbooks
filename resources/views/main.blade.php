@@ -67,7 +67,8 @@
                     <form class="form-inline" action="{{ $base_url }}search" method="POST" >
                         <div class="form-group">
                             {{ csrf_field() }}
-                            <input type="text" class="form-control" id="query" name="query" placeholder="Search for a book..." value="{{ $query }}" style="width:400px;"/>
+                            <input type="text" class="form-control" id="query" name="query" placeholder="Search for a book..." value="" style="width:400px;"/>
+
                             <button type="submit" id="query_submit" class="btn btn-default">Submit</button>
                             <input type="checkbox" name="query_api" class="btn btn-default" value="1"> Google API
                         </div>
@@ -75,6 +76,16 @@
                 </div>
             </div>
         </div>
+    </div>
+@show
+@section('subnav')
+    <div id="subnav" class="collapse navbar-collapse" style="margin-top: -30px;margin-left: 30%;">
+    <p style="font-style: italic;">There are currently {{ $books_count }} books and {{ $booklists_count }} booklists in the local database</p>
+      <ul class="nav navbar-nav">
+        @if($nav_class == "books")
+        <li {{ ($nav_class == "new_book" ? 'class=active' : '') }}><a href="{{ $base_url }}books">Create A New Book</a></li>
+        @endif
+      </ul>
     </div>
 @show
 <hr /><br />

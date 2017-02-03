@@ -15,7 +15,7 @@ class Books extends Migration
     {
         Schema::create('books', function (Blueprint $table) {
             $table->increments('id');
-            $table->bigInteger('external_id');
+            $table->string('external_id', 100);
             $table->integer('booklist_id');
             $table->string('name', 1000);
             $table->string('author');
@@ -26,6 +26,8 @@ class Books extends Migration
             $table->string('infourl', 1000);
             $table->string('imageurl', 1000);
             $table->string('category', 1000);
+            $table->datetime('updated_at');
+            $table->datetime('created_at');
         });
     }
 
