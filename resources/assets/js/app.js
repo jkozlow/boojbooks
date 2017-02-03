@@ -1,20 +1,31 @@
+$(document).ready(function() {
+    //turns tables into sortable grids
+    $('#bookDataTable').dataTable({
+        "iDisplayLength": 25
+    });
+    $('.button, input:submit').button();
 
-/**
- * First we will load all of this project's JavaScript dependencies which
- * include Vue and Vue Resource. This gives a great starting point for
- * building robust, powerful web applications using Vue and Laravel.
- */
+    $('#books_panel_show').click(function(event){
+        event.preventDefault();
+        $('#books_panel').show();
+        $('#books_table').hide();
+    }); 
 
-require('./bootstrap');
-
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the body of the page. From here, you may begin adding components to
- * the application, or feel free to tweak this setup for your needs.
- */
-
-Vue.component('example', require('./components/Example.vue'));
-
-const app = new Vue({
-    el: '#app'
+    $('#books_table_show').click(function(event){
+        event.preventDefault();
+        $('#books_table').show();
+        $('#books_panel').hide();
+    });     
 });
+
+$('#books_panel_show').click(function(event){
+    event.preventDefault();
+    $('#books_panel').show();
+    $('#books_table').hide();
+}); 
+
+$('#books_table_show').click(function(event){
+    event.preventDefault();
+    $('#books_table').show();
+    $('#books_panel').hide();
+});    
