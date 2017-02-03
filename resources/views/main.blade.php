@@ -78,7 +78,7 @@
         </div>
     </div>
 @show
-@section('subnav')
+@section('submain')
     <div id="subnav" class="collapse navbar-collapse" style="margin-top: -30px;margin-left: 30%;">
     <p style="font-style: italic;">There are currently {{ $books_count }} books and {{ $booklists_count }} booklists in the local database</p>
       <ul class="nav navbar-nav">
@@ -142,7 +142,7 @@
         </thead>
         <tbody>
         @foreach ($search_results as $item)    
-          <tr id="{{ (isset($item['book_id']) ? $item['book_id'] : $item['id']) }}">
+          <tr class="table_row" onClick="window.location.replace('{{ $base_url }}books/{{ (isset($item['book_id']) ? $item['book_id'] : $item['id']) }}');" {{ ((float) ($loop->index / 2) == ((int) ($loop->index / 2)) ? 'class=table_row_a' : 'class=table_row_b') }} id="{{ (isset($item['book_id']) ? $item['book_id'] : $item['id']) }}">
           <td><a href="{{ $base_url }}books/{{ (isset($item['book_id']) ? $item['book_id'] : $item['id']) }}">{{ (isset($item['title']) ? $item['title'] : $item['name']) }}</a></td>
           <td>{{ $item['author'] }}</td>
           <td>{{ substr($item['description'], 0, 175) }}...</td>
@@ -151,10 +151,14 @@
         @endforeach
         </tbody>
         </table>    
+        </div>
+        </div>
+    </div>
 @show
 
+<div class="clearfix">&nbsp;</div>
 
-
+@section('body_scripts')
     <script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.12.4.js">
     </script>
     <!-- Latest compiled and minified JavaScript -->
@@ -163,9 +167,6 @@
     <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.13/datatables.min.js"></script>    
     <script type="text/javascript" language="javascript" src="{{ $base_url }}js/app.js">
     </script> 
-    <script type="text/javascript">
-      $("#dataTables_length").hide();
-    </script>   
+@show    
   </body>
 </html>
-../
