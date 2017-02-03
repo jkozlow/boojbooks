@@ -162,7 +162,10 @@
     
     <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.13/datatables.min.js"></script>    
     <script type="text/javascript" language="javascript" src="{{ $base_url }}js/app.js">
-    </script>    
+    </script> 
+    <script type="text/javascript">
+      $("#dataTables_length").hide();
+    </script>   
   </body>
 </html>
 ../

@@ -163,8 +163,7 @@ p.title {
   padding: 15px;
     border-bottom:1px dashed #aaa; 
 }
-.bookdetail_item_question {
 
-}
-.bookdetail_item_answer { 
+#bookDataTable_length {
+	display:none;
 }

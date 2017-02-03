@@ -23,12 +23,14 @@ class BooksController extends Controller
         $this->data['nav_class'] = "home";
 
         $this->data['search_results'] = [];
+        $this->data['base_url'] = $this->base_url;
+    }
+
+    public function finalize() {
         $this->data['booklists'] = Booklist::all();
         $books = Books::all();
         $this->data['books_count'] = count($books);
         $this->data['booklists_count'] = count($this->data['booklists']);
-        $this->data['base_url'] = $this->base_url;
-
     }
 
 	public function google_api_search($query) {
@@ -58,6 +60,7 @@ class BooksController extends Controller
 
         $form_data = Request::all();   
 
+        $this->finalize();
         return view($this->data['view'], $this->data );
     }       
 
@@ -67,6 +70,7 @@ class BooksController extends Controller
         $this->data['pagetitle'] = 'boojbooks | About boojbooks.';    
         $this->data['view'] = 'about';
         $this->data['nav_class'] = "about";
+        $this->finalize();
         return view($this->data['view'], $this->data );
     }        
 
@@ -76,7 +80,7 @@ class BooksController extends Controller
         $this->data['pagetitle'] = 'boojbooks | Search for book.';    
         $this->data['view'] = 'home';
         $results = "";
-        
+
         if(!isset($form_data['query']) || empty($form_data['query'])) {
             $form_data['query'] = "";
         }
@@ -139,9 +143,10 @@ class BooksController extends Controller
                     $book->page_count = ($item['pageCount'] ? $item['pageCount'] : 0);
                     $book->description = ($item['description'] ? $item['description'] : "");
                     $book->name = $item['title'];
-                    $book->imageurl = $item['imageLinks']['thumbnail'];
+                    $book->imageurl = ($item['imageLinks']['thumbnail'] ? $item['imageLinks']['thumbnail'] : "");
                     $book->infourl = $item['infoLink'];
                     $book->category = ($book['category'] ? $book['category']  : "");
+                    $book->author = ($book['author'] ? $book['author']  : "");
                     $item['external_id'] = $item['book_id'];
                     $item['book_id'] = $book['id'];
                     $book->save();             
@@ -163,6 +168,7 @@ class BooksController extends Controller
 
         $this->data['search_results'] = $results;
         $this->data['nav_class'] = "books";
+        $this->finalize();
     	return view($this->data['view'], $this->data );
     }     
 
@@ -177,6 +183,7 @@ class BooksController extends Controller
         if(isset($form_data['save_book']) && !empty($form_data['save_book'])) {
             if(isset($form_data['delete']) && !empty($form_data['delete'])) {
                 Books::destroy($book_id);
+                $this->finalize();
                 return redirect($this->base_url);
             } else {
                 if(!$book || $book_id == 0) {
@@ -210,6 +217,7 @@ class BooksController extends Controller
 
         $this->data['book'] = $book;
         $this->data['nav_class'] = "books";
+        $this->finalize();
         return view($this->data['view'], $this->data );                
     }
 
@@ -226,6 +234,7 @@ class BooksController extends Controller
 
         $this->data['search_results'] = $books->toArray();
         $this->data['nav_class'] = "lists";
+        $this->finalize();
         return view($this->data['view'], $this->data );
     }    
 
@@ -270,6 +279,7 @@ class BooksController extends Controller
 
         $this->data['search_results'] = $results;
         $this->data['nav_class'] = "lists";
+        $this->finalize();
         return view($this->data['view'], $this->data );
     }
 

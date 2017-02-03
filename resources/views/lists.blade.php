@@ -7,12 +7,14 @@
         <form action="{{ $base_url }}booklists">
 		<table>
 		<tr>
-		<td><input type=text name="newlist"  placeholder="New List Name..."  /></td>
+		<td> <input type="text" class="form-control" id="newlist" name="newlist" placeholder="Create a new booklist, Name it here!" value="" style="width:400px;"/></td>
 		<td><input type=submit name="newlistbutton" id="newlistbutton" value="create"></td>
 		</tr>
 		</table>
 		</form>
 		</div>
+		<div style="height:25px;">&nbsp;</div>
+		@if($booklists_count)
 		<table id="bookDataTable" class="table table-striped table-bordered">
 		<thead>
 			<tr>
@@ -29,6 +31,7 @@
 		</tr>
     	@endforeach
         </table>
+        @endif
         </div>
         </div>
     </div><!-- /.container -->
