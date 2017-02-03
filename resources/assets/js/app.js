@@ -1,7 +1,9 @@
 $(document).ready(function() {
     //turns tables into sortable grids
     $('#bookDataTable').dataTable({
-        "iDisplayLength": 25
+        "iDisplayLength": 25,
+        paging: true,
+        searching: false
     });
     $('.button, input:submit').button();
 
