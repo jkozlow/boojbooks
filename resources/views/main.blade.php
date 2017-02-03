@@ -19,7 +19,7 @@
     <link href="https://cdn.datatables.net/1.10.13/css/dataTables.bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="{{ $base_url }}../css/custom.css" rel="stylesheet">
+    <link href="{{ $base_url }}css/custom.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -150,7 +150,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     
     <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.13/datatables.min.js"></script>    
-    <script type="text/javascript" language="javascript" src="{{ $base_url }}../js/app.js">
+    <script type="text/javascript" language="javascript" src="{{ $base_url }}js/app.js">
     </script>    
   </body>
 </html>
