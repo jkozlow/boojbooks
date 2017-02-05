@@ -28,6 +28,5 @@ class Booklists extends Migration
      */
     public function down()
     {
-        //
-    }
+        Schema::drop('booklists');    }
 }

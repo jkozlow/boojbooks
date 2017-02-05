@@ -24,3 +24,5 @@ Route::match(['get', 'post'], "books/{book_id?}",  'BooksController@showbook')->
 Route::match(['get', 'post'], "booksinlist/{booklist_id?}",  'BooksController@booksinlist')->name('booksinlist');
 
 Route::match(['get', 'post'], "booklists/{booklist_id?}",  'BooksController@booklists')->name('booklists');
+
+Route::match(['get', 'post'], "bookplanner",  'BooksController@bookplanner')->name('bookplanner');

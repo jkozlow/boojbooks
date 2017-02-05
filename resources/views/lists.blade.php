@@ -25,9 +25,9 @@
 		</thead>
 		@foreach($search_results as $key => $value)
 		<tr>
-			<td><a href="{{ $base_url }}booksinlist/{{ $value->id }}">{{ $value->listname }}</a></td>
-			<td><a href="{{ $base_url }}booksinlist/{{ $value->id }}">View</a></td>
-			<td><a href="{{ $base_url }}booklists/{{ $value->id }}?delete=1">delete</a></td>
+			<td><a href="{{ $base_url }}booksinlist/{{ $value['id'] }}">{{ $value['listname'] }}</a></td>
+			<td><a href="{{ $base_url }}booksinlist/{{ $value['id'] }}">View</a></td>
+			<td><a href="{{ $base_url }}booklists/{{ $value['id'] }}?delete=1">delete</a></td>
 		</tr>
     	@endforeach
         </table>

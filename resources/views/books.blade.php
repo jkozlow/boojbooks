@@ -8,6 +8,9 @@
 	        	<form action="{{ $base_url }}books/{{ $book['id'] }}" method="POST">
 	        	{{ csrf_field() }}
 	        	<input type="hidden" name="save_book" value="1" />
+	        	@if(!isset($book['id']))
+	        	<input type="hidden" name="new" value="1" />
+	        	@endif
 	        	<input type="hidden" name="book_id" value="{{ $book['id'] }}" />
 	        	<div id="bookdetail">
 					<div class="row bookdetail_item">
@@ -26,34 +29,34 @@
 					    <div class="col-sm-2 bookdetail_item_question rightalign">Booklist:</div>
 					    <div class="col-sm-10 bookdetail_item_answer leftalign">
        					<select name='booklist_id'>
-						<option {{ ($book['booklist_id'] == 0 ? 'SELECTED' : '') }} value="0">- Select -</option>
+						<option {{ ($book['booklist_id'] == 0 ? 'SELECTED' : '') }} value="-1">- Select -</option>
        					@foreach ($booklists as $item) 
-        					<option {{ ($book['booklist_id'] == $item['id'] ? 'SELECTED' : '') }} value=" {{ $item->id }} "'>{{ $item->listname }}</option>
+        					<option {{ ($book['booklist_id'] == $item['id'] ? 'SELECTED' : '') }} value=" {{ $item['id'] }} "'>{{ $item['listname'] }}</option>
         				@endforeach
         				</select>
 					    </div>
 					</div>				
 					<div class="row bookdetail_item">
-					        <div class="col-sm-2 rightalign">Image</div>
-					        <div class="col-sm-10 leftalign"><img src="{{ $book['imageurl'] }}" /></div>
+					        <div class="col-sm-2 bookdetail_item_question rightalign">Image</div>
+					        <div class="col-sm-10 bookdetail_item_answer leftalign"><a href="#" class="fancybox" id="book_image"><img alt="" src="{{ $book['imageurl'] }}" /></a></div>
 					</div>	
 					<div class="row bookdetail_item">
-					        <div class="col-sm-2 rightalign">Description:</div>
-					        <div class="col-sm-10 leftalign"><textarea cols="80" rows="20" name="description">{{ $book['description'] }}</textarea></div>
+					        <div class="col-sm-2 bookdetail_item_question rightalign">Description:</div>
+					        <div class="col-sm-10 bookdetail_item_answer leftalign"><textarea cols="80" rows="20" name="description">{{ $book['description'] }}</textarea></div>
 					</div>
 					<div class="row bookdetail_item">
-					        <div class="col-sm-2 rightalign">Total Page Count:</div>
-					        <div class="col-sm-10 leftalign">{{ $book['page_count'] }}</div>
+					        <div class="col-sm-2 bookdetail_item_question rightalign">Total Page Count:</div>
+					        <div class="col-sm-10 bookdetail_item_answer leftalign">{{ $book['page_count'] }}</div>
 					</div>						
 					<hr /><br />
 					<h3>My information</h3>
 					<div class="row bookdetail_item">
-					        <div class="col-sm-2 rightalign">Current Page Number:</div>
-					        <div class="col-sm-10 leftalign"><input type="text" name="pagenum" class="form-control" value="{{ $book['pagenum'] }}" /></div>
+					        <div class="col-sm-2 bookdetail_item_question rightalign">Current Page Number:</div>
+					        <div class="col-sm-10 bookdetail_item_answer leftalign"><input type="text" name="pagenum" class="form-control" value="{{ $book['page_num'] }}" /></div>
 					</div>										
 					<div class="row bookdetail_item">
-					        <div class="col-sm-2 rightalign">My Notes:</div>
-					        <div class="col-sm-10 leftalign"><textarea cols="80" rows="20" name="notes">{{ $book['notes'] }}</textarea></div>
+					        <div class="col-sm-2 bookdetail_item_question rightalign">My Notes:</div>
+					        <div class="col-sm-10 bookdetail_item_answer leftalign"><textarea cols="80" rows="20" name="notes">{{ $book['notes'] }}</textarea></div>
 					</div>					
 					<div class="row bookdetail_item">
 					        <div class="col-sm-2 rightalign">&nbsp;</div>
@@ -69,9 +72,4 @@
         </div>
     </div><!-- /.container -->
 
-<script type="text/javascript">
-	$('#btnCancel').click(function(event) {
-    	window.location.replace('{{ $base_url }}');
-    });   
-</script>  
 @endsection
