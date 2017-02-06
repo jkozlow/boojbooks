@@ -45,12 +45,20 @@
         "post-install-cmd": [
             "Illuminate\\Foundation\\ComposerScripts::postInstall",
             "php artisan optimize",
-            "php artisan migrate"
+            "php artisan migrate"            
         ],
         "post-update-cmd": [
             "Illuminate\\Foundation\\ComposerScripts::postUpdate",
             "php artisan optimize",
-            "php artisan migrate"
+            "php artisan migrate",
+            "php -r \"file_exists('storage/') || mkdir('storage');\"",
+            "php -r \"file_exists('storage/app/') || mkdir('storage/app');\"",
+            "php -r \"file_exists('storage/app/public/') || mkdir('storage/app/public');\"",
+            "php -r \"file_exists('storage/framework/') || mkdir('storage/framework');\"",
+            "php -r \"file_exists('storage/framework/cache/') || mkdir('storage/framework/cache');\"",
+            "php -r \"file_exists('storage/framework/sessions/') || mkdir('storage/framework/sessions');\"",
+            "php -r \"file_exists('storage/framework/views/') || mkdir('storage/framework/views');\"",
+            "php -r \"file_exists('storage/logs/') || mkdir('storage/logs');\""            
 	   
         ]
     },
