@@ -56,7 +56,6 @@ class BooksController extends Controller
         $this->data['pagetitle'] = 'boojbooks | My Reading Planner.';    
         $this->data['view'] = 'home';
         $this->data['nav_class'] = "planner";
-        // 99999 == Reading Queue, cheap hardcode :/
 
         $booklist = Booklist::reading_queue_list();
         $books = Books::getbybooklist($booklist->id);
@@ -76,26 +75,24 @@ class BooksController extends Controller
         return view($this->data['view'], $this->data );
     }        
 
-	public function search() {
+	public function search($query = "") {
 
 		$form_data = Request::all();   
         $this->data['pagetitle'] = 'boojbooks | Search for book.';    
         $this->data['view'] = 'home';
         $results = "";
 
-        if(!isset($form_data['query']) || empty($form_data['query'])) {
-            $form_data['query'] = "";
+        if(isset($form_data['query']) && !empty($form_data['query'])) {
+            $query = $form_data['query'];
         }
 
         if(isset($form_data['query_api']) && !empty($form_data['query_api'])) {
-    		if(isset($form_data['query']) && !empty($form_data['query'])) {
-    			Books::google_api_search($form_data['query']);
-    		} else { 
-                $form_data['query'] = "";
-            }
+    		if(strlen($query)) {
+    			Books::google_api_search($query);
+    		}
         }
 
-        $books = Books::getforweb();
+        $books = Books::getforweb($query);
         $results = $books;
 
         $booklists = Booklist::getforweb();
@@ -118,27 +115,15 @@ class BooksController extends Controller
         $booklists = Booklist::getforweb();
 
         if(isset($form_data['save_book']) && !empty($form_data['save_book'])) {
-            if(isset($form_data['delete']) && !empty($form_data['delete'])) {
+            if(isset($form_data['delete_book']) && !empty($form_data['delete_book'])) {
                 Books::destroy($book_id);
                 $this->finalize();
                 Session::flash('message', 'Book successfully deleted.');
                 return redirect($this->base_url);
             } else {
-                if(!$book || $book_id == 0) {
-                    if(isset($form_data['new']) && !empty($form_data['new'])) {
+                if(!$book_id) {
+                    if(isset($form_data['new_book']) && !empty($form_data['new_book'])) {
                         $book = new Books();
-                        $book->external_id = "0";
-                        $book->booklist_id = -1;
-                        $book->name = "";
-                        $book->author = "";
-                        $book->description = "";
-                        $book->notes = "";
-                        $book->page_num = 0;
-                        $book->page_count = 0;
-                        $book->time_to_read = 0;
-                        $book->infourl = "";
-                        $book->imageurl = "";
-                        $book->category = "";
                         $s_message = "New book successfully saved.";
                     }
                 } else {
@@ -148,7 +133,11 @@ class BooksController extends Controller
             }           
 
             if(isset($form_data['add_to_queue']) && !empty($form_data['add_to_queue'])) {
-                $book->booklist_id = Booklist::reading_queue_listid();
+                if($form_data['add_to_queue'] == 1) {
+                    $book->booklist_id = Booklist::reading_queue_listid();
+                } else {
+                    $book->booklist_id = 0;
+                }
             } else {
                 if(isset($form_data['booklist_id']) && !empty($form_data['booklist_id'])) {
                     $book->booklist_id = $form_data['booklist_id'];
@@ -160,6 +149,9 @@ class BooksController extends Controller
             if(isset($form_data['author']) && !empty($form_data['author'])) {
                 $book->author = $form_data['author'];
             }  
+            if(isset($form_data['category']) && !empty($form_data['category'])) {
+                $book->category = $form_data['category'];
+            }              
             if(isset($form_data['description']) && !empty($form_data['description'])) {
                 $book->description = $form_data['description'];
             }                        

@@ -1,4 +1,4 @@
-@extends('main')
+@extends('layouts.main')
 @section('results')
     <div class="container">
         <div class="row">

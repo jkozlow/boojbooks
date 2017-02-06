@@ -8,17 +8,27 @@ use Session;
 class Books extends Model
 {
     //
-    static function getforweb() {
-    	$books = Books::all();
+    static function getforweb($query = "") {
+    	if(strlen($query) > 0) {
+    		$books = Books::where('name', 'like', '%' . $query . '%')
+    			->orderBy('name', 'asc')
+    			->get();
+    	} else {
+    		$books = Books::where('id', '>', 0)
+    			->orderBy('name', 'asc')
+    			->get();    		
+    	}
     	return $books->toArray();
     }    
 
     static function getbybooklist($booklist_id) {
-    	$books = Books::where('booklist_id', '=', $booklist_id)->get();
+    	$books = Books::where('booklist_id', '=', $booklist_id)
+    			->orderBy('name', 'asc')
+    			->get();      	
     	return $books->toArray();
     }        
 
-	static function google_api_search($query) {
+	static function google_api_search($query = "") {
         try {
             $client = new \Google_Client();
             $client->setApplicationName(env("APP_NAME"));
@@ -95,16 +105,11 @@ class Books extends Model
 		    }
 
         } catch (Exception $e) {
-            Session::flash('error', 'There was a problem connecting to the Google API server, please retry.');
+            Session::flash('message', 'There was a problem connecting to the Google API server, please retry.');
             return false;
         }
         
         return true;
 
 	}
-
-    static function loadfromapiiem($item) {
-	    
-	    return $book;      	
-    }
 }

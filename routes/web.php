@@ -15,7 +15,7 @@ Route::match(['get', 'post'], '/', 'BooksController@start')->name('home');
 
 Route::match(['get', 'post'], 'about', 'BooksController@about')->name('about');
 
-Route::match(['get', 'post'], 'search', 'BooksController@search')->name('search');
+Route::match(['get', 'post'], 'search/{query?}', 'BooksController@search')->name('search');
 
 Route::match(['get', 'post'], 'searchlocal/{query?}', 'BooksController@searchlocal')->name('searchlocal');
 

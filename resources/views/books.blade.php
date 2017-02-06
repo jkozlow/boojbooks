@@ -1,16 +1,15 @@
-@extends('main')
-
+@extends('layouts.main')
 @section('results')
     <div class="container">
         <div class="row">
         	<div class="wrapper">
         		<h3>Edit book information</h2>
-	        	<form action="{{ $base_url }}books/{{ $book['id'] }}" method="POST">
-	        	{{ csrf_field() }}
-	        	<input type="hidden" name="save_book" value="1" />
-	        	@if(!isset($book['id']))
-	        	<input type="hidden" name="new" value="1" />
+				@if(!isset($book['id']))
+        		<form action="{{ $base_url }}books/{{ $book['id'] }}" method="POST">
+        		@else
+	        	<form action="{{ $base_url }}books/-1" method="POST">
 	        	@endif
+	        	{{ csrf_field() }}
 	        	<input type="hidden" name="book_id" value="{{ $book['id'] }}" />
 	        	<div id="bookdetail">
 					<div class="row bookdetail_item">
@@ -38,7 +37,7 @@
 					</div>				
 					<div class="row bookdetail_item">
 					        <div class="col-sm-2 bookdetail_item_question rightalign">Image</div>
-					        <div class="col-sm-10 bookdetail_item_answer leftalign"><a href="#" class="fancybox" id="book_image"><img alt="" src="{{ $book['imageurl'] }}" /></a></div>
+					        <div class="col-sm-10 bookdetail_item_answer leftalign"><a href="{{ $book['imageurl'] }}" class="fancybox" id="book_image"><img alt="" src="{{ $book['imageurl'] }}" /></a></div>
 					</div>	
 					<div class="row bookdetail_item">
 					        <div class="col-sm-2 bookdetail_item_question rightalign">Description:</div>
@@ -47,7 +46,11 @@
 					<div class="row bookdetail_item">
 					        <div class="col-sm-2 bookdetail_item_question rightalign">Total Page Count:</div>
 					        <div class="col-sm-10 bookdetail_item_answer leftalign">{{ $book['page_count'] }}</div>
-					</div>						
+					</div>		
+					<div class="row bookdetail_item">
+					        <div class="col-sm-2 bookdetail_item_question rightalign">Reading Time (estimated):</div>
+					        <div class="col-sm-10 bookdetail_item_answer leftalign">{{ $book['page_count'] }}</div>
+					</div>											
 					<hr /><br />
 					<h3>My information</h3>
 					<div class="row bookdetail_item">
@@ -62,7 +65,7 @@
 					        <div class="col-sm-2 rightalign">&nbsp;</div>
 					        <div class="col-sm-10 leftalign">
 					        	<input type="submit" name="submit" value="Save" />
-					        	<input type="submit" name="delete" value="Delete" />
+					        	<input type="submit" name="delete_book" value="Delete" />
 								<input type="button" id="btnCancel" name="btnCancel" value="Cancel" />					        	
 					        </div>
 					</div>						
