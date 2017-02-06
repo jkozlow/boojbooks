@@ -1,5 +1,4 @@
 <?php
-echo  storage_path('framework/cache'); exit();
 return [
 
     /*
