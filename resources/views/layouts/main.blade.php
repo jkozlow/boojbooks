@@ -29,8 +29,9 @@
 
     <link rel="stylesheet" href="{{ $base_url }}css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ $base_url }}css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="{{ $base_url }}css/dataTables.bootstrap.min.css"><<link rel="stylesheet" href="{{ $base_url }}fancybox/source/jquery.fancybox.css?v=2.1.6">
-    <link  rel="stylesheet" href="{{ $base_url }}css/custom.css"> 
+    <link rel="stylesheet" href="{{ $base_url }}css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" href="{{ $base_url }}fancybox/source/jquery.fancybox.css?v=2.1.6">
+    <link rel="stylesheet" href="{{ $base_url }}css/custom.css"> 
   </head>
 <body>
 
